@@ -1,0 +1,11 @@
+fastapi[standard]
+uvicorn 
+
+requests
+
+
+sqlalchemy
+pymysql
+
+
+python-dotenv
