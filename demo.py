@@ -8,7 +8,7 @@ app = FastAPI()
 app.include_router(msg_sent_tod.router,tags =["message_sent_avg"])
 
 
-@app.get("/dashboard")
+@app.get("/")
 async def home():
     return f"Hello From DashBoard Page"
 

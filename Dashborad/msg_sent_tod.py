@@ -1,6 +1,6 @@
 import logging
 
-from Raw_data.json_data import today_msg
+from Raw_data.json_data import today_msgs
 
 
 from fastapi import APIRouter
@@ -17,6 +17,6 @@ router = APIRouter()
 @router.get("/dashboard/msg-sent-tod")
 async def message_sent_today():
     logging.info("msg-sent-avg endpoint called")
-    total = today_msg()
+    total = today_msgs()
     return f"Message Sent Today : {total}" 
 

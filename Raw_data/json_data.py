@@ -32,10 +32,28 @@ data    = {
         "status": "SENT",
         "datetime": "2026-02-09T10:35:12",
         "description": "Marketing campaign broadcast"
+      },
+      {
+        "message": "Welcome SMS sent to user",
+        "status": "SENT",
+        "datetime": "2026-02-09T10:15:22",
+        "description": "Initial onboarding message delivered successfully"
+      },
+      {
+        "message": "Welcome SMS sent to user",
+        "status": "SENT",
+        "datetime": "2026-02-10T10:15:22",
+        "description": "Initial onboarding message delivered successfully"
+      },
+      {
+        "message": "Welcome SMS sent to user",
+        "status": "SENT",
+        "datetime": "2026-02-09T10:15:22",
+        "description": "Initial onboarding message delivered successfully"
       }
     ]
   }
-def today_msg():
+def today_msgs():
         
         df = pd.DataFrame(data["data"])
         df["datetime"] = pd.to_datetime(df["datetime"])
