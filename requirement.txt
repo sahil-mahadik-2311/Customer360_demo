@@ -1,11 +1,20 @@
-fastapi[standard]
-uvicorn 
+fastapi                             #API framework
+uvicorn                             #Server
+pydantic                            #Request/response validation
+
+sqlalchemy                          #ORM for DB models
+pymysql                             #MySQL driver
+psycopg2-binary                     #PostgresSQL driver
+
+
+python-jose[cryptography]           #JWT token create/verify
+passlib[bcrypt]                     #Secure password hashing
+python-multipart                    #Login form support
+bcrypt          
+
+
+
 
 requests
-
-
-sqlalchemy
-pymysql
-
 
 python-dotenv

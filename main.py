@@ -1,18 +1,36 @@
-import uvicorn 
+import uvicorn
 
-from fastapi import APIRouter , FastAPI
+from typing import Annotated
+from fastapi import FastAPI, status, Depends, HTTPException
+
 from Dashborad import msg_sent_tod
+
+from Auth import JWTauth
+from Auth.JWTauth import get_current_emp
+
+from sqlalchemy.orm import Session
+from Database.db_config import engine
+from Database.init_db import get_db
+
+from Database import db_config
+db_config.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(msg_sent_tod.router,tags =["message_sent_avg"])
+db_dependncy = Annotated[Session, Depends(get_db)]
+emp_dependency = Annotated[dict, Depends(get_current_emp)]
 
 
-@app.get("/")
-async def home():
-    return f"Hello From DashBoard Page"
+app.include_router(msg_sent_tod.router, tags=["message_sent_tod"])
+app.include_router(JWTauth.router)
 
 
+@app.get("/", status_code=status.HTTP_200_OK)
+async def employee(emp: emp_dependency, db: db_dependncy):
+    if emp is None:
+        raise HTTPException(status_code=401, detail="Authenticatin Failed")
+
+    return {"Employee": emp}
 
 
 if __name__ == "__main__":

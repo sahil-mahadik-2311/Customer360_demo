@@ -6,3 +6,75 @@
 2026-02-09 14:46:49,580 - INFO - msg-sent-avg endpoint called
 2026-02-09 14:47:29,695 - INFO - msg-sent-avg endpoint called
 2026-02-09 14:48:40,791 - INFO - msg-sent-avg endpoint called
+2026-02-09 17:30:55,392 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 17:33:59,832 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 17:39:47,425 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 17:44:08,672 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 17:49:11,854 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 17:56:48,147 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-09 18:01:07,348 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 09:50:04,598 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 09:51:14,880 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 09:54:26,348 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 10:02:12,379 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 10:06:29,491 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/ashishd/Desktop/Sahil/Customer360_demo/myenv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
