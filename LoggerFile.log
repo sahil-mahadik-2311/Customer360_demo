@@ -78,3 +78,4 @@ Traceback (most recent call last):
     version = _bcrypt.__about__.__version__
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-02-10 18:08:32,586 - INFO - msg-sent-avg endpoint called

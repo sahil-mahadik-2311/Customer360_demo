@@ -4,14 +4,14 @@ from datetime import timedelta, datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import jwt, JWTError
 
+from sqlalchemy.orm import Session
 from Database.init_db import get_db
 from Database.model import CreateUserRequest, Token
 from Database.db_model import EmployeeCreate
-from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import jwt, JWTError
+
 
 router = APIRouter(
     prefix="/auth",
@@ -23,12 +23,12 @@ ALGORITHM = 'HS256'
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
-db_dependencies = Annotated[Session, Depends(get_db)]
+db_dependency = Annotated[Session, Depends(get_db)]
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_emp(
-    db: db_dependencies,
+async def create_employee(
+    db: db_dependency,
     create_emp_req: CreateUserRequest
 ):
     # Validate password length
@@ -54,7 +54,7 @@ async def create_emp(
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-                                 db: db_dependencies):
+                                 db: db_dependency):
 
     emp = authenticate_emp(form_data.username, form_data.password, db)
 

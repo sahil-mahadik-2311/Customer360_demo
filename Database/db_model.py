@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+
 from Database.db_config import Base
 
 class EmployeeCreate(Base):
