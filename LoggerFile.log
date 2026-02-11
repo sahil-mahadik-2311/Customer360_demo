@@ -81,3 +81,32 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-02-10 18:08:32,586 - INFO - msg-sent-avg endpoint called
 2026-02-11 13:26:42,084 - INFO - msg-sent-avg endpoint called
 2026-02-11 15:15:22,546 - INFO - msg-sent-avg endpoint called
+2026-02-11 16:32:43,898 - INFO - msg-sent-avg endpoint called
+2026-02-11 16:35:43,962 - WARNING - Employee not found: aayush@example.com
+2026-02-11 16:35:44,207 - INFO - Employee created successfully: aayush@example.com
+2026-02-11 16:36:11,475 - INFO - Employee found: aayush@example.com
+2026-02-11 16:36:11,711 - INFO - Employee authenticated successfully: aayush@example.com
+2026-02-11 16:36:11,714 - INFO - Access token created for employee: aayush@example.com
+2026-02-11 16:36:11,714 - INFO - Authentication cookie set successfully
+2026-02-11 16:36:46,044 - INFO - Employee found: aayush@example.com
+2026-02-11 16:36:46,281 - INFO - Employee authenticated successfully: aayush@example.com
+2026-02-11 16:36:46,282 - INFO - Access token created for employee: aayush@example.com
+2026-02-11 16:36:46,282 - INFO - Authentication cookie set successfully
+2026-02-11 16:36:55,549 - INFO - Retrieved info for employee: aayush@example.com
+2026-02-11 16:38:07,954 - INFO - Retrieved info for employee: aayush@example.com
+2026-02-11 16:38:46,888 - INFO - msg-sent-avg endpoint called
+2026-02-11 16:49:29,970 - INFO - Employee found: pranit@example.com
+2026-02-11 16:49:30,206 - WARNING - Authentication failed: Invalid password for pranit@example.com
+2026-02-11 16:49:49,397 - INFO - Employee found: pranit@example.com
+2026-02-11 16:49:49,645 - WARNING - Authentication failed: Invalid password for pranit@example.com
+2026-02-11 16:50:52,459 - INFO - Employee found: pranit@example.com
+2026-02-11 16:50:52,697 - WARNING - Authentication failed: Invalid password for pranit@example.com
+2026-02-11 16:51:28,131 - INFO - Employee found: aayush@example.com
+2026-02-11 16:51:28,371 - INFO - Employee authenticated successfully: aayush@example.com
+2026-02-11 16:51:28,374 - INFO - Access token created for employee: aayush@example.com
+2026-02-11 16:51:28,374 - INFO - Authentication cookie set successfully
+2026-02-11 16:51:40,476 - INFO - Employee found: aayush@example.com
+2026-02-11 16:51:40,717 - INFO - Employee authenticated successfully: aayush@example.com
+2026-02-11 16:51:40,717 - INFO - Access token created for employee: aayush@example.com
+2026-02-11 16:51:40,717 - INFO - Authentication cookie set successfully
+2026-02-11 16:55:12,939 - INFO - Retrieved info for employee: aayush@example.com

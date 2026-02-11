@@ -3,7 +3,7 @@ import bcrypt
 from datetime import timedelta, datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status , Response
+from fastapi import APIRouter, Depends, HTTPException, status , Response , Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 
@@ -108,11 +108,11 @@ def create_access_token(employee: str, emp_id: int, expires_delta: timedelta):
 
 
 async def get_current_emp(token: Annotated[str, Depends(oauth2_bearer)]):
-    
+
     try:
         payload = jwt.decode(token, Setting.SECRET_KEY,
                              algorithms=[Setting.ALGORITHM])
-        
+
         username: str = payload.get('sub')
         emp_id: int = payload.get('id')
 
@@ -121,7 +121,7 @@ async def get_current_emp(token: Annotated[str, Depends(oauth2_bearer)]):
                                 detail="Could not validate employee")
 
         return {'Emp_email': username, 'Emp_id': emp_id}
-    
+
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Could not validate employee")
