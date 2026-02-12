@@ -1,13 +1,18 @@
+"""
+Authentication Module - Refactored with OOP, Exception Handling, and Logging
+Now using sessionStorage on client instead of cookies
+"""
+
 import bcrypt
-
+import logging
 from datetime import timedelta, datetime
-from typing import Annotated
+from typing import Annotated, Optional, Dict, Any
 
-from fastapi import APIRouter, Depends, HTTPException, status , Response , Cookie
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
-
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
 
 from Database.init_db import get_db
 from Database.model import CreateUserRequest, Token
@@ -15,113 +20,329 @@ from Database.db_model import EmployeeCreate
 from .hasher import Hashing
 from Secret import Setting
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+# ==================== Custom Exceptions ====================
+class AuthenticationError(Exception):
+    """Base exception for authentication errors"""
+    pass
+
+
+class EmployeeNotFoundError(AuthenticationError):
+    """Raised when employee is not found"""
+    pass
+
+
+class InvalidCredentialsError(AuthenticationError):
+    """Raised when credentials are invalid"""
+    pass
+
+
+class TokenError(AuthenticationError):
+    """Raised when token operations fail"""
+    pass
+
+
+class DatabaseError(Exception):
+    """Raised when database operations fail"""
+    pass
+
+
+# ==================== Configuration ====================
+class AuthConfig:
+    """Authentication configuration settings"""
+    ACCESS_TOKEN_EXPIRE_MINUTES = 20
+    # REFRESH_TOKEN_EXPIRE_DAYS = 7    # commented — not used anymore
+    # COOKIE_... fields removed
+
+
+# ==================== Token Service ====================
+class TokenService:
+    """Handles all token-related operations"""
+
+    @staticmethod
+    def create_access_token(
+        employee_email: str,
+        emp_id: int,
+        expires_delta: timedelta
+    ) -> str:
+        """
+        Create a JWT access token
+        """
+        try:
+            payload = {
+                'sub': employee_email,
+                'id': emp_id,
+                'exp': datetime.utcnow() + expires_delta,
+                'iat': datetime.utcnow()
+            }
+
+            token = jwt.encode(
+                payload,
+                Setting.SECRET_KEY,
+                algorithm=Setting.ALGORITHM
+            )
+
+            logger.info(f"Access token created for employee: {employee_email}")
+            return token
+
+        except Exception as e:
+            logger.error(f"Failed to create access token: {str(e)}")
+            raise TokenError(f"Token creation failed: {str(e)}")
+
+    @staticmethod
+    def decode_token(token: str) -> Dict[str, Any]:
+        """
+        Decode and validate JWT token
+        """
+        try:
+            payload = jwt.decode(
+                token,
+                Setting.SECRET_KEY,
+                algorithms=[Setting.ALGORITHM]
+            )
+
+            username = payload.get('sub')
+            emp_id = payload.get('id')
+
+            if username is None or emp_id is None:
+                raise TokenError("Invalid token payload")
+
+            return {'Emp_email': username, 'Emp_id': emp_id}
+
+        except JWTError as e:
+            logger.warning(f"JWT validation failed: {str(e)}")
+            raise TokenError(f"Invalid token: {str(e)}")
+        except Exception as e:
+            logger.error(f"Token decoding error: {str(e)}")
+            raise TokenError(f"Token decoding failed: {str(e)}")
+
+
+# ==================== Authentication Service ====================
+class AuthenticationService:
+    """Handles authentication logic"""
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_employee_by_email(self, email: str) -> Optional[EmployeeCreate]:
+        try:
+            employee = self.db.query(EmployeeCreate).filter(
+                EmployeeCreate.Emp_email == email
+            ).first()
+
+            if employee:
+                logger.info(f"Employee found: {email}")
+            else:
+                logger.warning(f"Employee not found: {email}")
+
+            return employee
+
+        except SQLAlchemyError as e:
+            logger.error(f"Database error while fetching employee: {str(e)}")
+            raise DatabaseError(f"Failed to retrieve employee: {str(e)}")
+
+    def authenticate(self, email: str, password: str) -> EmployeeCreate:
+        try:
+            employee = self.get_employee_by_email(email)
+
+            if not employee:
+                logger.warning(f"Authentication failed: Employee not found - {email}")
+                raise EmployeeNotFoundError(f"No employee found with email: {email}")
+
+            if not Hashing.verify_password(password, employee.hashed_pass):
+                logger.warning(f"Authentication failed: Invalid password for {email}")
+                raise InvalidCredentialsError("Invalid password")
+
+            logger.info(f"Employee authenticated successfully: {email}")
+            return employee
+
+        except (EmployeeNotFoundError, InvalidCredentialsError):
+            raise
+        except Exception as e:
+            logger.error(f"Authentication error: {str(e)}")
+            raise AuthenticationError(f"Authentication failed: {str(e)}")
+
+    def create_employee(self, employee_data: CreateUserRequest) -> EmployeeCreate:
+        try:
+            existing_emp = self.get_employee_by_email(employee_data.Emp_email)
+            if existing_emp:
+                logger.warning(f"Employee already exists: {employee_data.Emp_email}")
+                raise DatabaseError("Employee with this email already exists")
+
+            hashed_password = Hashing.hash_password(employee_data.password)
+
+            employee = EmployeeCreate(
+                Emp_email=employee_data.Emp_email,
+                hashed_pass=hashed_password
+            )
+
+            self.db.add(employee)
+            self.db.commit()
+            self.db.refresh(employee)
+
+            logger.info(f"Employee created successfully: {employee_data.Emp_email}")
+            return employee
+
+        except DatabaseError:
+            raise
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            logger.error(f"Database error during employee creation: {str(e)}")
+            raise DatabaseError(f"Failed to create employee: {str(e)}")
+        except Exception as e:
+            self.db.rollback()
+            logger.error(f"Unexpected error during employee creation: {str(e)}")
+            raise DatabaseError(f"Employee creation failed: {str(e)}")
+
+
+# ==================== Dependencies ====================
+db_dependency = Annotated[Session, Depends(get_db)]
+req_form = Annotated[OAuth2PasswordRequestForm, Depends()]
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
+
+
+def get_auth_service(db: db_dependency) -> AuthenticationService:
+    """Dependency to get authentication service instance"""
+    return AuthenticationService(db)
+
+
+async def get_current_employee(
+    token: Annotated[str, Depends(oauth2_bearer)]
+) -> Dict[str, Any]:
+    """
+    Dependency to get current authenticated employee from Bearer token
+    """
+    try:
+        return TokenService.decode_token(token)
+        
+    except TokenError as e:
+        logger.warning(f"Token validation failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+
+# ==================== Router Setup ====================
 router = APIRouter(
     prefix="/auth",
     tags=['auth']
 )
 
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
-db_dependency = Annotated[Session, Depends(get_db)]
-req_form = Annotated[OAuth2PasswordRequestForm, Depends()]
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 20 #Minutes
-REFRESH_TOKEN_EXPIRE_DAYS = 7 #Days
-
-
+# ==================== API Endpoints ====================
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_employee(
-    db: db_dependency,
-    create_emp_req: CreateUserRequest
-):
+    create_emp_req: CreateUserRequest,
+    auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
+) -> Dict[str, str]:
+    try:
+        auth_service.create_employee(create_emp_req)
+        return {"message": "Employee created successfully"}
 
-    # Hash the password
-    hashed_password = Hashing.hash_password(create_emp_req.password)
-
-    employee = EmployeeCreate(
-        Emp_email=create_emp_req.Emp_email,
-        hashed_pass=hashed_password
-    )
-
-    db.add(employee)
-    db.commit()
-    db.refresh(employee)
-
-    return {"message": "Employee created successfully"}
+    except DatabaseError as e:
+        if "already exists" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=str(e)
+            )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in create_employee endpoint: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
 
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: req_form,
-    db: db_dependency,
-    response: Response,
-):
-    emp = authenticate_emp(form_data.username, form_data.password, db)
-
-    if not emp:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate Employee."
+    auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
+) -> Dict[str, str]:
+    """
+    Authenticate employee and return access token.
+    Client should store it in sessionStorage.
+    """
+    try:
+        employee = auth_service.authenticate(
+            form_data.username,
+            form_data.password
         )
 
-    access_token = create_access_token(
-        employee=emp.Emp_email,
-        emp_id=emp.Emp_id,
-        expires_delta=timedelta(ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+        access_token = TokenService.create_access_token(
+            employee_email=employee.Emp_email,
+            emp_id=employee.Emp_id,
+            expires_delta=timedelta(minutes=AuthConfig.ACCESS_TOKEN_EXPIRE_MINUTES)
+        )
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=True,               # ← Change to True in production!
-        samesite="lax",
-        max_age=20 * 60,
-        path="/",
-    )
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
 
-    return {"access_token": access_token, "token_type": "bearer"}
-
-def authenticate_emp(Emp_email: str, password: str, db):
-
-    emp = db.query(EmployeeCreate).filter(
-        EmployeeCreate.Emp_email == Emp_email).first()
-
-    if not emp:
-        return False
-    if not Hashing.verify_password(password, emp.hashed_pass):
-        return False
-
-    return emp
-
-
-def create_access_token(employee: str, emp_id: int, expires_delta: timedelta):
-
-    encode = {'sub': employee, 'id': emp_id}
-    expires = datetime.utcnow() + expires_delta
-    encode.update({'exp': expires})
-
-    return jwt.encode(encode, Setting.SECRET_KEY, algorithm=Setting.ALGORITHM)
+    except (EmployeeNotFoundError, InvalidCredentialsError) as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except TokenError as e:
+        logger.error(f"Token creation failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create access token"
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in login endpoint: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
 
 
-
-
-
-async def get_current_emp(token: Annotated[str, Depends(oauth2_bearer)]):
-
+@router.post("/logout")
+async def logout(
+    current_emp: Annotated[Dict[str, Any], Depends(get_current_employee)]
+) -> Dict[str, str]:
+    """
+    Logical logout endpoint.
+    Client should remove token from sessionStorage.
+    """
     try:
-        payload = jwt.decode(token, Setting.SECRET_KEY,
-                             algorithms=[Setting.ALGORITHM])
+        logger.info(f"Employee logged out: {current_emp['Emp_email']}")
+        return {"message": "Successfully logged out"}
 
-        username: str = payload.get('sub')
-        emp_id: int = payload.get('id')
+    except Exception as e:
+        logger.error(f"Logout error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Logout failed"
+        )
 
-        if username is None or emp_id is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail="Could not validate employee")
 
-        return {'Emp_email': username, 'Emp_id': emp_id}
+@router.get("/me")
+async def get_current_user_info(
+    current_emp: Annotated[Dict[str, Any], Depends(get_current_employee)]
+) -> Dict[str, Any]:
+    try:
+        logger.info(f"Retrieved info for employee: {current_emp['Emp_email']}")
+        return current_emp
 
-    except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Could not validate employee")
+    except Exception as e:
+        logger.error(f"Error retrieving user info: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve user information"
+        )
