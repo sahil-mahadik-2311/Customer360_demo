@@ -1,7 +1,5 @@
 import bcrypt
 
-
-
 class Hashing:
 
     @staticmethod

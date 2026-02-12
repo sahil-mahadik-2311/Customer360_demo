@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "employee_id": 5,
+    "message": "Welcome SMS",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T09:15:22",
+    "resolution_time_seconds": 2.0,
+    "escalated": false,
+    "resolved": true,
+    "csat_score": 100.0
+  },
+  {
+    "id": 2,
+    "employee_id": 5,
+    "message": "Payment reminder",
+    "status": "DELIVERED",
+    "datetime": "2026-02-11T10:42:10",
+    "resolution_time_seconds": 2.5,
+    "escalated": true,
+    "resolved": false,
+    "csat_score": 95.0
+  },
+  {
+    "id": 3,
+    "employee_id": 5,
+    "message": "Verification code",
+    "status": "FAILED",
+    "datetime": "2026-02-12T11:05:33",
+    "resolution_time_seconds": 4.5,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 4,
+    "employee_id": 5,
+    "message": "Promotion offer",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T08:30:00",
+    "resolution_time_seconds": 2.3,
+    "escalated": true,
+    "resolved": true,
+    "csat_score": 99.0
+  },
+  {
+    "id": 5,
+    "employee_id": 5,
+    "message": "Order shipped",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T14:20:45",
+    "resolution_time_seconds": 2.4,
+    "escalated": true,
+    "resolved": false,
+    "csat_score": 99.0
+  },
+  {
+    "id": 6,
+    "employee_id": 5,
+    "message": "Birthday offer",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T12:01:15",
+    "resolution_time_seconds": 2.3,
+    "escalated": false,
+    "resolved": true,
+    "csat_score": 98.0
+  },
+  {
+    "id": 7,
+    "employee_id": 5,
+    "message": "Support update",
+    "status": "DELIVERED",
+    "datetime": "2026-02-10T16:55:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 8,
+    "employee_id": 5,
+    "message": "Password reset",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T07:10:22",
+    "resolution_time_seconds": 2.3,
+    "escalated": false,
+    "resolved": true,
+    "csat_score": null
+  },
+  {
+    "id": 9,
+    "employee_id": 5,
+    "message": "Flash sale",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T13:20:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 10,
+    "employee_id": 5,
+    "message": "Test message 10",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T14:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 11,
+    "employee_id": 5,
+    "message": "Test message 11",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T15:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 12,
+    "employee_id": 5,
+    "message": "Test message 12",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T16:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 13,
+    "employee_id": 5,
+    "message": "Test message 13",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T17:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 14,
+    "employee_id": 5,
+    "message": "Test message 14",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T18:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 15,
+    "employee_id": 5,
+    "message": "Test message 15",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T19:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 16,
+    "employee_id": 5,
+    "message": "Test message 16",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T20:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 17,
+    "employee_id": 5,
+    "message": "Test message 17",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T21:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 18,
+    "employee_id": 5,
+    "message": "Test message 18",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T22:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 19,
+    "employee_id": 5,
+    "message": "Test message 19",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T23:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  },
+  {
+    "id": 20,
+    "employee_id": 5,
+    "message": "Test message 20",
+    "status": "DELIVERED",
+    "datetime": "2026-02-12T00:00:00",
+    "resolution_time_seconds": null,
+    "escalated": false,
+    "resolved": false,
+    "csat_score": null
+  }
+]

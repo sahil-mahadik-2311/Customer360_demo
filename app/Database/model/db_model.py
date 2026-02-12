@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from Database.db_config import Base
+from app.Database.config import Base
 
 class EmployeeCreate(Base):
     __tablename__ = "new_emp"

@@ -1,6 +1,5 @@
 """
 Authentication Module - Refactored with OOP, Exception Handling, and Logging
-Now using sessionStorage on client instead of cookies
 """
 
 import bcrypt
@@ -8,15 +7,15 @@ import logging
 from datetime import timedelta, datetime
 from typing import Annotated, Optional, Dict, Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response , Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from Database.init_db import get_db
+from app.Database.session import get_db
 from Database.model import CreateUserRequest, Token
-from Database.db_model import EmployeeCreate
+from app.Database.model.db_model import EmployeeCreate
 from .hasher import Hashing
 from Secret import Setting
 
@@ -58,8 +57,12 @@ class DatabaseError(Exception):
 class AuthConfig:
     """Authentication configuration settings"""
     ACCESS_TOKEN_EXPIRE_MINUTES = 20
-    # REFRESH_TOKEN_EXPIRE_DAYS = 7    # commented — not used anymore
-    # COOKIE_... fields removed
+    REFRESH_TOKEN_EXPIRE_DAYS = 7
+    COOKIE_NAME = "access_token"
+    COOKIE_SECURE = False  # Set to True in production
+    COOKIE_HTTPONLY = True
+    COOKIE_SAMESITE = "lax"
+    COOKIE_PATH = "/"
 
 
 # ==================== Token Service ====================
@@ -74,6 +77,17 @@ class TokenService:
     ) -> str:
         """
         Create a JWT access token
+
+        Args:
+            employee_email: Employee's email address
+            emp_id: Employee's ID
+            expires_delta: Token expiration time
+
+        Returns:
+            Encoded JWT token
+
+        Raises:
+            TokenError: If token creation fails
         """
         try:
             payload = {
@@ -100,6 +114,15 @@ class TokenService:
     def decode_token(token: str) -> Dict[str, Any]:
         """
         Decode and validate JWT token
+
+        Args:
+            token: JWT token string
+
+        Returns:
+            Decoded token payload
+
+        Raises:
+            TokenError: If token is invalid or expired
         """
         try:
             payload = jwt.decode(
@@ -132,6 +155,18 @@ class AuthenticationService:
         self.db = db
 
     def get_employee_by_email(self, email: str) -> Optional[EmployeeCreate]:
+        """
+        Retrieve employee by email
+
+        Args:
+            email: Employee's email address
+
+        Returns:
+            Employee object or None
+
+        Raises:
+            DatabaseError: If database query fails
+        """
         try:
             employee = self.db.query(EmployeeCreate).filter(
                 EmployeeCreate.Emp_email == email
@@ -149,15 +184,32 @@ class AuthenticationService:
             raise DatabaseError(f"Failed to retrieve employee: {str(e)}")
 
     def authenticate(self, email: str, password: str) -> EmployeeCreate:
+        """
+        Authenticate employee with email and password
+
+        Args:
+            email: Employee's email
+            password: Plain text password
+
+        Returns:
+            Authenticated employee object
+
+        Raises:
+            EmployeeNotFoundError: If employee doesn't exist
+            InvalidCredentialsError: If password is incorrect
+        """
         try:
             employee = self.get_employee_by_email(email)
 
             if not employee:
-                logger.warning(f"Authentication failed: Employee not found - {email}")
-                raise EmployeeNotFoundError(f"No employee found with email: {email}")
+                logger.warning(
+                    f"Authentication failed: Employee not found - {email}")
+                raise EmployeeNotFoundError(
+                    f"No employee found with email: {email}")
 
             if not Hashing.verify_password(password, employee.hashed_pass):
-                logger.warning(f"Authentication failed: Invalid password for {email}")
+                logger.warning(
+                    f"Authentication failed: Invalid password for {email}")
                 raise InvalidCredentialsError("Invalid password")
 
             logger.info(f"Employee authenticated successfully: {email}")
@@ -170,14 +222,30 @@ class AuthenticationService:
             raise AuthenticationError(f"Authentication failed: {str(e)}")
 
     def create_employee(self, employee_data: CreateUserRequest) -> EmployeeCreate:
+        """
+        Create a new employee
+
+        Args:
+            employee_data: Employee creation request data
+
+        Returns:
+            Created employee object
+
+        Raises:
+            DatabaseError: If employee creation fails
+        """
         try:
+            # Check if employee already exists
             existing_emp = self.get_employee_by_email(employee_data.Emp_email)
             if existing_emp:
-                logger.warning(f"Employee already exists: {employee_data.Emp_email}")
+                logger.warning(
+                    f"Employee already exists: {employee_data.Emp_email}")
                 raise DatabaseError("Employee with this email already exists")
 
+            # Hash password
             hashed_password = Hashing.hash_password(employee_data.password)
 
+            # Create employee instance
             employee = EmployeeCreate(
                 Emp_email=employee_data.Emp_email,
                 hashed_pass=hashed_password
@@ -187,7 +255,8 @@ class AuthenticationService:
             self.db.commit()
             self.db.refresh(employee)
 
-            logger.info(f"Employee created successfully: {employee_data.Emp_email}")
+            logger.info(
+                f"Employee created successfully: {employee_data.Emp_email}")
             return employee
 
         except DatabaseError:
@@ -198,8 +267,58 @@ class AuthenticationService:
             raise DatabaseError(f"Failed to create employee: {str(e)}")
         except Exception as e:
             self.db.rollback()
-            logger.error(f"Unexpected error during employee creation: {str(e)}")
+            logger.error(
+                f"Unexpected error during employee creation: {str(e)}")
             raise DatabaseError(f"Employee creation failed: {str(e)}")
+
+
+# ==================== Cookie Manager ====================
+class CookieManager:
+    """Handles cookie operations"""
+
+    @staticmethod
+    def set_auth_cookie(response: Response, token: str) -> None:
+        """
+        Set authentication cookie in response
+
+        Args:
+            response: FastAPI Response object
+            token: JWT token to store
+        """
+        try:
+            response.set_cookie(
+                key=AuthConfig.COOKIE_NAME,
+                value=token,
+                httponly=AuthConfig.COOKIE_HTTPONLY,
+                secure=AuthConfig.COOKIE_SECURE,
+                samesite=AuthConfig.COOKIE_SAMESITE,
+                max_age=AuthConfig.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+                path=AuthConfig.COOKIE_PATH,
+            )
+            logger.info("Authentication cookie set successfully")
+
+        except Exception as e:
+            logger.error(f"Failed to set cookie: {str(e)}")
+            raise
+
+    @staticmethod
+    def clear_auth_cookie(response: Response) -> None:
+        """
+        Clear authentication cookie from response
+
+        Args:
+            response: FastAPI Response object
+        """
+        try:
+            response.delete_cookie(
+                key=AuthConfig.COOKIE_NAME,
+                path=AuthConfig.COOKIE_PATH
+            )
+            logger.info("Authentication cookie cleared")
+
+        except Exception as e:
+            logger.error(f"Failed to clear cookie: {str(e)}")
+            raise
 
 
 # ==================== Dependencies ====================
@@ -213,11 +332,45 @@ def get_auth_service(db: db_dependency) -> AuthenticationService:
     return AuthenticationService(db)
 
 
+
+# Add this new dependency function
+async def get_token_from_cookie_or_header(
+    token: Optional[str] = Depends(oauth2_bearer),
+    access_token: Optional[str] = Cookie(default=None)
+) -> str:
+    """
+    Get token from either Authorization header or cookie
+    
+    Args:
+        token: Token from Authorization header
+        access_token: Token from cookie
+        
+    Returns:
+        JWT token string
+        
+    Raises:
+        HTTPException: If no token found
+    """
+    if token:
+        return token
+    
+    if access_token:
+        return access_token
+    
+    logger.warning("No authentication token provided")
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not authenticated",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+# Update get_current_employee to use the new dependency
 async def get_current_employee(
-    token: Annotated[str, Depends(oauth2_bearer)]
+    token: Annotated[str, Depends(get_token_from_cookie_or_header)]
 ) -> Dict[str, Any]:
     """
-    Dependency to get current authenticated employee from Bearer token
+    Dependency to get current authenticated employee from token
     """
     try:
         return TokenService.decode_token(token)
@@ -229,6 +382,7 @@ async def get_current_employee(
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
 
 
 # ==================== Router Setup ====================
@@ -244,6 +398,19 @@ async def create_employee(
     create_emp_req: CreateUserRequest,
     auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
 ) -> Dict[str, str]:
+    """
+    Create a new employee account
+
+    Args:
+        create_emp_req: Employee creation request
+        auth_service: Authentication service dependency
+
+    Returns:
+        Success message
+
+    Raises:
+        HTTPException: If employee creation fails
+    """
     try:
         auth_service.create_employee(create_emp_req)
         return {"message": "Employee created successfully"}
@@ -269,23 +436,40 @@ async def create_employee(
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: req_form,
+    response: Response,
     auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
 ) -> Dict[str, str]:
     """
-    Authenticate employee and return access token.
-    Client should store it in sessionStorage.
+    Authenticate employee and return access token
+
+    Args:
+        form_data: OAuth2 password request form
+        response: FastAPI response object
+        auth_service: Authentication service dependency
+
+    Returns:
+        Access token and token type
+
+    Raises:
+        HTTPException: If authentication fails
     """
     try:
+        # Authenticate employee
         employee = auth_service.authenticate(
             form_data.username,
             form_data.password
         )
 
+        # Create access token
         access_token = TokenService.create_access_token(
             employee_email=employee.Emp_email,
             emp_id=employee.Emp_id,
-            expires_delta=timedelta(minutes=AuthConfig.ACCESS_TOKEN_EXPIRE_MINUTES)
+            expires_delta=timedelta(
+                minutes=AuthConfig.ACCESS_TOKEN_EXPIRE_MINUTES)
         )
+
+        # Set cookie
+        CookieManager.set_auth_cookie(response, access_token)
 
         return {
             "access_token": access_token,
@@ -314,13 +498,21 @@ async def login_for_access_token(
 
 @router.post("/logout")
 async def logout(
+    response: Response,
     current_emp: Annotated[Dict[str, Any], Depends(get_current_employee)]
 ) -> Dict[str, str]:
     """
-    Logical logout endpoint.
-    Client should remove token from sessionStorage.
+    Logout current employee by clearing auth cookie
+
+    Args:
+        response: FastAPI response object
+        current_emp: Current authenticated employee
+
+    Returns:
+        Success message
     """
     try:
+        CookieManager.clear_auth_cookie(response)
         logger.info(f"Employee logged out: {current_emp['Emp_email']}")
         return {"message": "Successfully logged out"}
 
@@ -336,6 +528,15 @@ async def logout(
 async def get_current_user_info(
     current_emp: Annotated[Dict[str, Any], Depends(get_current_employee)]
 ) -> Dict[str, Any]:
+    """
+    Get current authenticated employee information
+
+    Args:
+        current_emp: Current authenticated employee from token
+
+    Returns:
+        Employee information
+    """
     try:
         logger.info(f"Retrieved info for employee: {current_emp['Emp_email']}")
         return current_emp
@@ -346,3 +547,4 @@ async def get_current_user_info(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve user information"
         )
+

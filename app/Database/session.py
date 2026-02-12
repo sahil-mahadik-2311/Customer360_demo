@@ -1,4 +1,4 @@
-from Database.db_config import session 
+from app.Database.config import session 
 
 def get_db():
 

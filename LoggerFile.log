@@ -110,3 +110,13 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-02-11 16:51:40,717 - INFO - Access token created for employee: aayush@example.com
 2026-02-11 16:51:40,717 - INFO - Authentication cookie set successfully
 2026-02-11 16:55:12,939 - INFO - Retrieved info for employee: aayush@example.com
+2026-02-11 18:21:10,084 - WARNING - Employee not found: manish@example.com
+2026-02-11 18:21:10,461 - INFO - Employee created successfully: manish@example.com
+2026-02-11 18:21:45,811 - INFO - Employee found: manish@example.com
+2026-02-11 18:21:46,177 - INFO - Employee authenticated successfully: manish@example.com
+2026-02-11 18:21:46,181 - INFO - Access token created for employee: manish@example.com
+2026-02-11 18:21:46,182 - INFO - Authentication cookie set successfully
+2026-02-11 18:22:14,780 - INFO - Employee found: manish@example.com
+2026-02-11 18:22:15,125 - INFO - Employee authenticated successfully: manish@example.com
+2026-02-11 18:22:15,125 - INFO - Access token created for employee: manish@example.com
+2026-02-11 18:22:15,125 - INFO - Authentication cookie set successfully
