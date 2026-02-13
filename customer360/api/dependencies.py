@@ -12,12 +12,11 @@ from ..services import dashboard_services as dashservices
 
 
 dash_act_esc = Annotated[dashservices.activate_escalation_service,Depends(dashservices.activate_escalation_service.get_active_escalations)]
-
 dash_avg_res = Annotated[dashservices.average_resolution_service,Depends(dashservices.average_resolution_service.get_avg_resolution_time)]
 dash_csat_score = Annotated[dashservices.csat_score_service,Depends(dashservices.csat_score_service.get_csat_score)]
 dash_del_rate = Annotated[dashservices.delivery_rate_service,Depends(dashservices.delivery_rate_service.get_delivery_rate)]
 dash_fail_msg = Annotated[dashservices.failed_message_service,Depends(dashservices.failed_message_service.get_failed_messages)]
-
+dash_del_sta = Annotated[dashservices.delivery_status_service,Depends(dashservices.delivery_status_service.get_delivery_status)]
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
@@ -48,3 +47,4 @@ async def get_current_employee(
         )
 
 emp_dependency = Annotated[dict, Depends(get_current_employee)]
+

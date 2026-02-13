@@ -1,4 +1,4 @@
-from Secret import Setting
+from ..core.config import Setting
 from datetime import timedelta , datetime
 from jose import jwt , JWTError
 from ..utils.exceptions import DatabaseError , EmployeeNotFoundError , InvalidCredentialsError ,TokenError , AuthenticationError

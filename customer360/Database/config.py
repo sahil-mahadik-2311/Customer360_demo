@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker 
 from sqlalchemy.ext.declarative import declarative_base
 
-from Secret import Setting
+from ..core.config import Setting
 
 Base = declarative_base()
 
