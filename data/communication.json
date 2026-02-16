@@ -1,0 +1,67 @@
+[
+    {
+      "id": "MSG001",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "type": "Outbound",
+      "channel": "SMS",
+      "status": "Delivered",
+      "message": "Dear Customer, your Home Loan EMI of Rs.15,000 is due on 30-Nov-2025. Please ensure sufficient balance. - Axis Bank",
+      "sent_time": "2025-11-27 14:30:25",
+      "delivered_time": "2025-11-27 14:32:32",
+      "template": "EMI_DUE_REMINDER_v2",
+      "issue_type": null
+    },
+    {
+      "id": "MSG002",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "type": "Outbound",
+      "channel": "WhatsApp",
+      "status": "Delivered",
+      "message": "Your Home Loan EMI is due soon. Pay now to avoid late fees.",
+      "sent_time": "2025-11-28 09:15:00",
+      "delivered_time": "2025-11-28 09:16:10",
+      "template": "EMI_REMINDER_WHATSAPP",
+      "issue_type": null
+    },
+    {
+      "id": "MSG003",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827464",
+      "type": "Outbound",
+      "channel": "Email",
+      "status": "Delivered",
+      "message": "Personal Loan EMI Reminder – Please pay ₹8,000 by due date.",
+      "sent_time": "2025-11-25 10:45:00",
+      "delivered_time": "2025-11-25 10:46:20",
+      "template": "PERSONAL_LOAN_REMINDER",
+      "issue_type": null
+    },
+    {
+      "id": "MSG004",
+      "customer_id": "CUST12347",
+      "lan": "LAN001827466",
+      "type": "Outbound",
+      "channel": "SMS",
+      "status": "Failed",
+      "message": "Your Business Loan is overdue. Please contact branch.",
+      "sent_time": "2025-11-20 16:00:00",
+      "delivered_time": null,
+      "template": "OVERDUE_ALERT",
+      "issue_type": "Gateway Timeout"
+    },
+    {
+      "id": "MSG005",
+      "customer_id": "CUST12348",
+      "lan": "LAN001827467",
+      "type": "Inbound",
+      "channel": "IVR",
+      "status": "Answered",
+      "message": "Customer called to confirm EMI payment date",
+      "sent_time": "2025-11-26 11:30:00",
+      "delivered_time": "2025-11-26 11:32:00",
+      "template": null,
+      "issue_type": null
+    }
+  ]

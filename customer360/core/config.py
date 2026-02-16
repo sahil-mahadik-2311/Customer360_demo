@@ -16,7 +16,7 @@ class Setting:
     DATABASE_NAME = os.getenv("DATABASE_NAME",'Customer360')
     DATABASE_URL = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_SERVER}:{DATABASE_PORT}/{DATABASE_NAME}"
     MESSAGES_JSON_PATH = Path(__file__).parent.parent.parent / "data" / "message.json"
-
+    BASE_DATA_PATH = Path(__file__).parent.parent.parent / "data" 
     STATUS_DELIVERED = "DELIVERED"  # Changed from "SENT" to "DELIVERED" as per request
     STATUS_FAILED = "FAILED"
 

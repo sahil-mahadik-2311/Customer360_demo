@@ -1,0 +1,52 @@
+[
+    {
+      "customer_id": "CUST12345",
+      "ucic_id": "UC08172635",
+      "name": "Priya Sharma",
+      "mobile": "+919876543210",
+      "email": "priya.sharma@example.com",
+      "pan": "ABCDE1234F",
+      "branch": "Delhi NCR",
+      "risk": "Low"
+    },
+    {
+      "customer_id": "CUST12346",
+      "ucic_id": "UC08172636",
+      "name": "Rajesh Kumar",
+      "mobile": "+919876543211",
+      "email": "rajesh.kumar@example.com",
+      "pan": "BCDEF5678G",
+      "branch": "Bangalore",
+      "risk": "Low"
+    },
+    {
+      "customer_id": "CUST12347",
+      "ucic_id": "UC08172637",
+      "name": "Amit Patel",
+      "mobile": "+919876543212",
+      "email": "amit.patel@example.com",
+      "pan": "CDEFG9012H",
+      "branch": "Mumbai",
+      "risk": "High"
+    },
+    {
+      "customer_id": "CUST12348",
+      "ucic_id": "UC08172638",
+      "name": "Sneha Verma",
+      "mobile": "+919876543213",
+      "email": "sneha.verma@example.com",
+      "pan": "DEFGH3456I",
+      "branch": "Kolkata",
+      "risk": "Medium"
+    },
+    {
+      "customer_id": "CUST12349",
+      "ucic_id": "UC08172639",
+      "name": "Vikram Singh",
+      "mobile": "+919876543214",
+      "email": "vikram.singh@example.com",
+      "pan": "EFGHI7890J",
+      "branch": "Bhopal",
+      "risk": "Medium"
+    }
+  ]

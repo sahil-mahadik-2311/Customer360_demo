@@ -4,3 +4,4 @@ from .dashboard_services.message_service import MessageService
 
 
 
+from .CommunicationTimeline.customer_details_service import CustomerDetailsService

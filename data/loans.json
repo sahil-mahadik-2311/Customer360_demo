@@ -1,0 +1,52 @@
+[
+    {
+      "customer_id": "CUST12345",
+      "type": "Home Loan",
+      "lan": "LAN001827463",
+      "zone": "North",
+      "status": "Active",
+      "outstanding": 48000,
+      "emi": 15000,
+      "active": true
+    },
+    {
+      "customer_id": "CUST12345",
+      "type": "Personal Loan",
+      "lan": "LAN001827464",
+      "zone": "North",
+      "status": "Active",
+      "outstanding": 12000,
+      "emi": 8000,
+      "active": true
+    },
+    {
+      "customer_id": "CUST12346",
+      "type": "Car Loan",
+      "lan": "LAN001827465",
+      "zone": "South",
+      "status": "Active",
+      "outstanding": 250000,
+      "emi": 18000,
+      "active": true
+    },
+    {
+      "customer_id": "CUST12347",
+      "type": "Business Loan",
+      "lan": "LAN001827466",
+      "zone": "West",
+      "status": "Overdue",
+      "outstanding": 450000,
+      "emi": 35000,
+      "active": false
+    },
+    {
+      "customer_id": "CUST12348",
+      "type": "Education Loan",
+      "lan": "LAN001827467",
+      "zone": "East",
+      "status": "Active",
+      "outstanding": 320000,
+      "emi": 22000,
+      "active": true
+    }
+  ]
