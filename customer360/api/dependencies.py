@@ -17,7 +17,7 @@ dash_csat_score = Annotated[dashservices.csat_score_service,Depends(dashservices
 dash_del_rate = Annotated[dashservices.delivery_rate_service,Depends(dashservices.delivery_rate_service.get_delivery_rate)]
 dash_fail_msg = Annotated[dashservices.failed_message_service,Depends(dashservices.failed_message_service.get_failed_messages)]
 dash_del_sta = Annotated[dashservices.delivery_status_service,Depends(dashservices.delivery_status_service.get_delivery_status)]
-
+dash_vol_tre = Annotated[dashservices.volume_trends_service,Depends(dashservices.volume_trends_service.get_volume_trends)]
 db_dependency = Annotated[Session, Depends(get_db)]
 
 req_form = Annotated[OAuth2PasswordRequestForm, Depends()]
