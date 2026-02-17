@@ -7,6 +7,7 @@ from ..services import AuthenticationService , TokenService
 from ..utils.exceptions import TokenError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from ..services import dashboard_services as dashservices
+from ..services.auth_service import get_auth_service
 # ==================== Dependencies ====================
 
 
@@ -18,15 +19,12 @@ dash_del_rate = Annotated[dashservices.delivery_rate_service,Depends(dashservice
 dash_fail_msg = Annotated[dashservices.failed_message_service,Depends(dashservices.failed_message_service.get_failed_messages)]
 dash_del_sta = Annotated[dashservices.delivery_status_service,Depends(dashservices.delivery_status_service.get_delivery_status)]
 dash_vol_tre = Annotated[dashservices.volume_trends_service,Depends(dashservices.volume_trends_service.get_volume_trends)]
-db_dependency = Annotated[Session, Depends(get_db)]
 
+db_dependency = Annotated[Session, Depends(get_db)]
 req_form = Annotated[OAuth2PasswordRequestForm, Depends()]
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='api/v1/auth/token')
 
 
-def get_auth_service(db: db_dependency) -> AuthenticationService:
-    """Dependency to get authentication service instance"""
-    return AuthenticationService(db)
 
 
 async def get_current_employee(

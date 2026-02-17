@@ -1,7 +1,11 @@
-from .auth_service import AuthenticationService
+from .auth_service import AuthenticationService , get_auth_service
 from .token_service import TokenService
 from .dashboard_services.message_service import MessageService
 
 
 
 from .CommunicationTimeline.customer_details_service import CustomerDetailsService
+
+from .Customer360_services.customer_service import CustomerListService
+from .Customer360_services.loansBYcustid_service import CustomerByIdService
+from .Customer360_services.loanBYloanid_service import PaymentBehaviourService

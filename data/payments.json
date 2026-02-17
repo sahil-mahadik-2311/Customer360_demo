@@ -1,0 +1,68 @@
+[
+    {
+      "payment_id": "PMT001",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": "2025-09-05",
+      "due_date": "2025-09-01",
+      "amount_due": 15000.0,
+      "amount_paid": 15000.0,
+      "status": "Paid",
+      "payment_method": "Auto Debit"
+    },
+    {
+      "payment_id": "PMT002",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": "2025-10-03",
+      "due_date": "2025-10-01",
+      "amount_due": 15000.0,
+      "amount_paid": 15000.0,
+      "status": "Paid",
+      "payment_method": "Auto Debit"
+    },
+    {
+      "payment_id": "PMT003",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": "2025-11-04",
+      "due_date": "2025-11-01",
+      "amount_due": 15000.0,
+      "amount_paid": 15000.0,
+      "status": "Paid",
+      "payment_method": "Auto Debit"
+    },
+    {
+      "payment_id": "PMT004",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": "2025-12-02",
+      "due_date": "2025-12-01",
+      "amount_due": 15000.0,
+      "amount_paid": 15000.0,
+      "status": "Paid",
+      "payment_method": "Auto Debit"
+    },
+    {
+      "payment_id": "PMT005",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": null,
+      "due_date": "2026-01-01",
+      "amount_due": 15000.0,
+      "amount_paid": 0.0,
+      "status": "Missed",
+      "payment_method": null
+    },
+    {
+      "payment_id": "PMT006",
+      "customer_id": "CUST12345",
+      "lan": "LAN001827463",
+      "payment_date": "2026-02-03",
+      "due_date": "2026-02-01",
+      "amount_due": 15000.0,
+      "amount_paid": 15000.0,
+      "status": "Paid",
+      "payment_method": "UPI"
+    }
+  ]

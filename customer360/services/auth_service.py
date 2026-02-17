@@ -1,4 +1,5 @@
-from typing import  Optional
+from typing import  Optional , Annotated 
+from fastapi import Depends
 
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -8,6 +9,8 @@ from ..schemas.model import CreateUserRequest
 from ..Database.model.db_model import EmployeeCreate
 from ..core.security import Hashing
 from ..utils.logger import logger
+
+db_dependency = Annotated[Session, Depends(get_db)]
 
 
 # ==================== Authentication Service ====================
@@ -88,3 +91,9 @@ class AuthenticationService:
             self.db.rollback()
             logger.error(f"Unexpected error during employee creation: {str(e)}")
             raise DatabaseError(f"Employee creation failed: {str(e)}")
+
+
+
+def get_auth_service(db: db_dependency) -> AuthenticationService:
+    """Dependency to get authentication service instance"""
+    return AuthenticationService(db)
