@@ -4,7 +4,7 @@ from typing import Annotated, Dict, Any
 from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.Customer360_services.loanBYloanid_service import get_payment_behaviour_service
+from customer360.services import PaymentBehaviourService
 
 router = APIRouter()
 
@@ -33,7 +33,7 @@ async def payment_behaviour(
     logger.info(f"payment-behaviour called for customer {customer_id_clean}, loan {lan_clean}")
 
     try:
-        service = get_payment_behaviour_service()
+        service = PaymentBehaviourService()
         result = service.get_payment_behaviour(customer_id=customer_id_clean, lan=lan_clean)
         
         if result["customer"] is None or result["loan"] is None:

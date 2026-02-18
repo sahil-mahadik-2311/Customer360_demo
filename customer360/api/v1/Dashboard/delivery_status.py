@@ -3,7 +3,7 @@ from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency , emp_dependency
 from fastapi import APIRouter, Depends, HTTPException, status
 from ....utils.logger import logger
-from ....services.dashboard_services import delivery_status_service
+from customer360.services import DeliveryRate
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ async def delivery_status(
         )
 
     try:
-        return delivery_status_service.get_delivery_status()
+        return DeliveryRate.get_delivery_status()
     except CalculationError as ce:
         raise HTTPException(status_code=500, detail=str(ce))
     except Exception:

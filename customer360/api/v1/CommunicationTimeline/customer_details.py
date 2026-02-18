@@ -4,7 +4,7 @@ from typing import Annotated, Dict, Any, Optional
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from ....utils.exceptions import CalculationError
-from ....services.CommunicationTimeline.customer_details_service import get_customer_details_service
+from customer360.services import CustomerDetailsService
 
 router = APIRouter()
 
@@ -32,7 +32,7 @@ async def customer_details(
     logger.info("customer-details endpoint called")
 
     try:
-        service = get_customer_details_service()
+        service = CustomerDetailsService()
         return service.get_customer_details(
             customer_id=customer_id,
             name=name,

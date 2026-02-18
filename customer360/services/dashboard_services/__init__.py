@@ -1,13 +1,26 @@
-from . import (activate_escalation , avg_resolution_time, csat_score , delivery_rate, failed_message , message_service , delivery_status,channel_perfomance,message_volume_trends)
 
-message_Service = message_service.MessageService()
-delivery_rate_service = delivery_rate.DeliveryRate()
-failed_message_service = failed_message.FailedMessage()
-average_resolution_service = avg_resolution_time.AverageResolutionTime()
-activate_escalation_service = activate_escalation.ActiveEscalation()
-csat_score_service = csat_score.CSAT_Score()
+from .message_service import MessageService
+from .avg_resolution_time import AverageResolutionTime
+from .failed_message import FailedMessage
+from .activate_escalation import ActiveEscalation
+from .delivery_rate import DeliveryRate
+from .csat_score import CSAT_Score
 
-delivery_status_service = delivery_status.DeliveryStatusService()
-channel_perfomance_service = channel_perfomance.ChannelPerformanceService()
+from .channel_perfomance import ChannelPerformanceService
+from .delivery_status import DeliveryStatusService
+from .message_volume_trends import VolumeTrendsService
+from .top_issues_service import TopIssuesService
+from .resolution_time_trend_service import ResolutionTimeTrendService
 
-volume_trends_service = message_volume_trends.VolumeTrendsService()
+__all__ = [
+           MessageService,
+           AverageResolutionTime,
+           FailedMessage,
+           ActiveEscalation,
+           DeliveryRate,
+           CSAT_Score,
+           ChannelPerformanceService,
+           DeliveryStatusService,
+           VolumeTrendsService,
+           TopIssuesService,
+           ResolutionTimeTrendService]

@@ -4,7 +4,7 @@ from typing import Annotated, Dict, Any, Optional
 from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.Customer360_services.customer_service import get_customer_list_service
+from customer360.services import CustomerListService
 
 router = APIRouter()
 
@@ -30,7 +30,7 @@ async def customer_list(
     logger.info(f"customer-list endpoint called (search: '{search}', limit: {limit}, offset: {offset})")
 
     try:
-        service = get_customer_list_service()
+        service = CustomerListService()
         return service.get_customers(search=search, limit=limit, offset=offset)
     except CalculationError as ce:
         raise HTTPException(status_code=500, detail=str(ce))

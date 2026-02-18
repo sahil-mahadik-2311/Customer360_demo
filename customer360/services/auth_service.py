@@ -95,5 +95,5 @@ class AuthenticationService:
 
 
 def get_auth_service(db: db_dependency) -> AuthenticationService:
-    """Dependency to get authentication service instance"""
-    return AuthenticationService(db)
+        """Dependency to get authentication service instance"""
+        return AuthenticationService(db)

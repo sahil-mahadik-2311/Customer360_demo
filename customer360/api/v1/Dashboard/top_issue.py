@@ -3,7 +3,7 @@ from typing import Annotated, List, Dict, Any
 
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.dashboard_services.top_issues_service import get_top_issues_service
+from customer360.services import TopIssuesService
 
 router = APIRouter()
 
@@ -17,5 +17,5 @@ async def top_issues(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
 
     logger.info("top-issues endpoint called")
-    service = get_top_issues_service()
+    service = TopIssuesService()
     return service.get_top_issues()

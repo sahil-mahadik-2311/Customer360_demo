@@ -1,8 +1,4 @@
-from fastapi import APIRouter
 
-from . import customer_details
+from .customer_details import router as customer_details_router
 
-router = APIRouter(prefix="/Communication Timeline")
-
-
-router.include_router(customer_details.router)
+__all__ = ["customer_details_router"]

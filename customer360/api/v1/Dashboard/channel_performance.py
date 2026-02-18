@@ -3,7 +3,7 @@ from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency , emp_dependency
 from fastapi import APIRouter, Depends, HTTPException, status , Query
 from ....utils.logger import logger
-from ....services.dashboard_services import channel_perfomance_service
+from customer360.services import ChannelPerformanceService
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ async def channel_performance(
         )
 
     try:
-        return channel_perfomance_service.get_channel_performance(sort_by=sort_by)
+        return ChannelPerformanceService.get_channel_performance(sort_by=sort_by)
     except CalculationError as ce:
         raise HTTPException(status_code=500, detail=str(ce))
     except Exception:

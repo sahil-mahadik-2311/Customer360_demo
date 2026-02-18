@@ -4,7 +4,7 @@ from typing import Annotated, Dict, Any, Optional
 from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.dashboard_services.resolution_time_trend_service import get_resolution_trend_service
+from customer360.services import ResolutionTimeTrendService
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ async def resolution_time_trend(
     logger.info("resolution-time-trend endpoint called")
 
     try:
-        service = get_resolution_trend_service()
+        service = ResolutionTimeTrendService()
         return service.get_resolution_trend(timeline=timeline, channel=channel)
     except CalculationError as ce:
         raise HTTPException(status_code=500, detail=str(ce))

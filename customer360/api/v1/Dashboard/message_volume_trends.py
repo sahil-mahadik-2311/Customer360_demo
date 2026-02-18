@@ -3,7 +3,7 @@ from typing import Annotated, List, Dict, Optional ,Any
 
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.dashboard_services.message_volume_trends import get_volume_trends_service
+from customer360.services import VolumeTrendsService
 
 router = APIRouter()
 
@@ -26,7 +26,7 @@ async def volume_trends(
     logger.info("volume-trends endpoint called")
 
     try:
-        service = get_volume_trends_service()
+        service = VolumeTrendsService()
         return service.get_volume_trends(period=period, channels=channels)
     except Exception as e:
         logger.error(f"Error in volume-trends: {str(e)}")

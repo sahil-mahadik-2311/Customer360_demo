@@ -4,8 +4,7 @@ from typing import Annotated, Dict, Any
 from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
-from ....services.Customer360_services.loansBYcustid_service import get_customer_by_id_service
-
+from customer360.services import CustomerByIdService
 router = APIRouter()
 
 
@@ -29,7 +28,7 @@ async def customer_by_id(
     logger.info(f"customer-by-id endpoint called for ID: {customer_id}")
 
     try:
-        service = get_customer_by_id_service()
+        service = CustomerByIdService()
         result = service.get_customer_by_id(customer_id=customer_id.strip())
         
         if result["customer"] is None:
