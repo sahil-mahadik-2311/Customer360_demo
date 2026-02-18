@@ -5,7 +5,8 @@ from ....utils.exceptions import CalculationError
 from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from customer360.services import CustomerByIdService
-router = APIRouter()
+
+router = APIRouter(prefix="/Customer360", tags=["Customer360"])
 
 
 @router.get("/customer-by-id", response_model=Dict[str, Any])

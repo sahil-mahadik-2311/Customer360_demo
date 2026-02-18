@@ -6,7 +6,7 @@ from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from customer360.services import PaymentBehaviourService
 
-router = APIRouter()
+router = APIRouter(prefix="/Customer360", tags=["Customer360"])
 
 
 @router.get("/loan_detailsbyloanID", response_model=Dict[str, Any])

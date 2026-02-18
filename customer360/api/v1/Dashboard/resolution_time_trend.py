@@ -6,7 +6,7 @@ from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from customer360.services import ResolutionTimeTrendService
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
 @router.get("/resolution-time-trend", response_model=Dict[str, Any])

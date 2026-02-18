@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status , Query
 from ....utils.logger import logger
 from customer360.services import ChannelPerformanceService
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
 

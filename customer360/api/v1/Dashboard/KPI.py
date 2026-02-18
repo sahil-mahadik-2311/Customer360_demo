@@ -10,7 +10,7 @@ from customer360.services import (MessageService,
            CSAT_Score)
 
 
-router = APIRouter(prefix="/kpi", tags=["Dashboard KPI"])
+router = APIRouter(prefix="/dashboard/kpi", tags=["Dashboard KPI"])
 
 
 

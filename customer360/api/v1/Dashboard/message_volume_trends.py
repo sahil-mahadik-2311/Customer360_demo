@@ -5,7 +5,7 @@ from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from customer360.services import VolumeTrendsService
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
 @router.get("/volume-trends", response_model=Dict[str, Any])

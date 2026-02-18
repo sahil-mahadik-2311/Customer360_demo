@@ -6,7 +6,7 @@ from ....utils.logger import logger
 from ....utils.exceptions import CalculationError
 from customer360.services import CustomerDetailsService
 
-router = APIRouter()
+router = APIRouter(prefix="/CommunicationTimeline", tags=["CommunicationTimeline"])
 
 
 @router.get("/customer-details", response_model=Dict[str, Any])

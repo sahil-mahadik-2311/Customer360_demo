@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from ....utils.logger import logger
 from customer360.services import DeliveryRate
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
 

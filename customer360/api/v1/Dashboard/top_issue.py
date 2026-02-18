@@ -5,7 +5,7 @@ from ...dependencies import db_dependency, emp_dependency
 from ....utils.logger import logger
 from customer360.services import TopIssuesService
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
 @router.get("/top-issues", response_model=List[Dict[str, Any]])
